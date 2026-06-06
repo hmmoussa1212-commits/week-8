@@ -1,0 +1,2140 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Week 8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f4c3a">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hadeer · Week 8 · Focus Mode 🎯</title>
+<link rel="manifest" href="manifest.json">
+<style>
+  :root {
+    --green-deep: #0f4c3a;
+    --green-mid: #1a6b52;
+    --green-light: #2d9b6f;
+    --green-pale: #e8f5f0;
+    --green-accent: #4CAF81;
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --text-dark: #1a2e25;
+    --text-mid: #3a5c4a;
+    --text-light: #6a9a80;
+    --white: #ffffff;
+    --card-bg: #ffffff;
+    --shadow: 0 2px 12px rgba(15,76,58,0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--green-pale);
+    color: var(--text-dark);
+    min-height: 100vh;
+    padding-bottom: 80px;
+    overflow-x: hidden;
+  }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%);
+    color: white;
+    padding: 16px 20px 14px;
+    padding-top: calc(16px + env(safe-area-inset-top));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(15,76,58,0.3);
+  }
+  .top-nav .title { font-size: 17px; font-weight: 700; letter-spacing: 0.3px; }
+  .top-nav .subtitle { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+  .nav-btn {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .notif-badge {
+    position: absolute; top: 2px; right: 2px;
+    background: var(--gold);
+    color: var(--green-deep);
+    font-size: 9px; font-weight: 800;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 60%, var(--green-light) 100%);
+    color: white;
+    padding: 24px 20px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -20px; left: -20px;
+    width: 100px; height: 100px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .hero-greeting { font-size: 26px; font-weight: 800; line-height: 1.2; }
+  .hero-sub { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+  .hero-meta { margin-top: 16px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .hero-meta-item { display: flex; align-items: center; gap: 6px; font-size: 12px; opacity: 0.9; }
+  .hero-meta-item .icon { font-size: 14px; }
+  .hero-msg {
+    margin-top: 16px;
+    background: rgba(255,255,255,0.12);
+    border-left: 3px solid var(--gold);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ── WEEK OVERVIEW ── */
+  .week-glance {
+    background: white;
+    margin: 16px 16px 0;
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+  .section-title {
+    font-size: 13px; font-weight: 700; color: var(--green-deep);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin-bottom: 12px;
+  }
+  .week-stats { display: flex; gap: 12px; margin-bottom: 14px; }
+  .stat-box {
+    flex: 1; text-align: center;
+    background: var(--green-pale);
+    border-radius: var(--radius-sm);
+    padding: 10px 6px;
+  }
+  .stat-num { font-size: 22px; font-weight: 800; color: var(--green-deep); }
+  .stat-label { font-size: 10px; color: var(--text-light); margin-top: 2px; }
+  .day-strip { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
+  .day-pill {
+    flex: 0 0 auto;
+    background: var(--green-pale);
+    border-radius: 20px;
+    padding: 6px 10px;
+    font-size: 11px; text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 52px;
+    border: 2px solid transparent;
+  }
+  .day-pill.active { background: var(--green-deep); color: white; border-color: var(--green-deep); }
+  .day-pill.today { border-color: var(--gold); }
+  .day-pill .day-name { font-weight: 700; font-size: 10px; }
+  .day-pill .day-num { font-size: 13px; font-weight: 800; margin-top: 1px; }
+  .day-pill .day-icon { font-size: 10px; margin-top: 1px; }
+
+  /* ── DAY SECTION ── */
+  .day-section { display: none; }
+  .day-section.active { display: block; }
+
+  .day-header {
+    margin: 16px 16px 0;
+    background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+    color: white;
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+  .day-header .day-title { font-size: 20px; font-weight: 800; }
+  .day-header .day-date { font-size: 12px; opacity: 0.85; margin-top: 3px; }
+  .day-header .day-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px; font-weight: 600;
+    margin-top: 8px;
+  }
+  .day-header .day-focus {
+    margin-top: 10px;
+    background: rgba(255,255,255,0.12);
+    border-left: 3px solid var(--gold);
+    padding: 8px 12px;
+    border-radius: 0 8px 8px 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* ── QUICK ACTIONS ── */
+  .quick-actions {
+    display: flex; gap: 8px;
+    margin: 12px 16px 0;
+    overflow-x: auto; padding-bottom: 4px;
+  }
+  .qa-btn {
+    flex: 0 0 auto;
+    background: white;
+    border: 2px solid var(--green-pale);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 12px; font-weight: 600;
+    color: var(--green-deep);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .qa-btn:active { background: var(--green-deep); color: white; border-color: var(--green-deep); }
+
+  /* ── MFVA FOCUS CARD ── */
+  .mfva-card {
+    margin: 12px 16px 0;
+    background: linear-gradient(135deg, #1a3a2a, #0f4c3a);
+    color: white;
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+  .mfva-card .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
+  .mfva-card .title { font-size: 16px; font-weight: 700; margin-top: 4px; }
+  .mfva-card .desc { font-size: 12px; opacity: 0.85; margin-top: 6px; line-height: 1.5; }
+  .mfva-card .sessions { display: flex; gap: 8px; margin-top: 10px; }
+  .mfva-card .session-tag {
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline { margin: 12px 16px 0; }
+  .timeline-item {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    box-shadow: 0 1px 6px rgba(15,76,58,0.08);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .timeline-item:active { transform: scale(0.99); }
+  .timeline-item.completed { opacity: 0.6; }
+  .timeline-item.completed .tl-title { text-decoration: line-through; }
+  .timeline-item.highlight { border-left: 4px solid var(--gold); }
+  .timeline-item.prayer { border-left: 4px solid var(--green-light); }
+  .timeline-item.study { border-left: 4px solid #4a90d9; }
+  .tl-icon { font-size: 20px; min-width: 28px; text-align: center; margin-top: 1px; }
+  .tl-content { flex: 1; }
+  .tl-time { font-size: 11px; color: var(--text-light); font-weight: 600; margin-bottom: 2px; }
+  .tl-title { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+  .tl-desc { font-size: 12px; color: var(--text-mid); margin-top: 3px; line-height: 1.4; }
+  .tl-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--green-pale);
+    background: var(--green-pale);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    min-width: 22px;
+    color: transparent;
+    transition: all 0.2s;
+  }
+  .timeline-item.completed .tl-check {
+    background: var(--green-light);
+    border-color: var(--green-light);
+    color: white;
+  }
+
+  /* ── MINI TRACKERS ── */
+  .mini-trackers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 16px 0;
+  }
+  .tracker-card {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    box-shadow: 0 1px 6px rgba(15,76,58,0.08);
+  }
+  .tracker-card .tc-label { font-size: 10px; color: var(--text-light); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+
+  /* WATER */
+  .water-drops { display: flex; flex-wrap: wrap; gap: 4px; }
+  .drop {
+    font-size: 20px; cursor: pointer; transition: all 0.2s;
+    filter: grayscale(1) opacity(0.3);
+  }
+  .drop.filled { filter: none; }
+
+  /* PRAYER */
+  .prayer-list { display: flex; flex-direction: column; gap: 4px; }
+  .prayer-item {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; padding: 4px 0;
+    border-bottom: 1px solid var(--green-pale);
+  }
+  .prayer-item:last-child { border-bottom: none; }
+  .prayer-name { font-weight: 600; color: var(--text-dark); }
+  .prayer-time { color: var(--text-light); font-size: 11px; }
+  .prayer-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--green-pale);
+    cursor: pointer;
+    background: var(--green-pale);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: transparent;
+    transition: all 0.2s;
+  }
+  .prayer-check.done { background: var(--green-light); border-color: var(--green-light); color: white; }
+
+  /* ── FULL TRACKERS ── */
+  .full-tracker {
+    background: white;
+    border-radius: var(--radius);
+    margin: 12px 16px 0;
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  /* SPIRITUAL */
+  .spiritual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .spiritual-item {
+    background: var(--green-pale);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    text-align: center;
+  }
+  .spiritual-item .si-icon { font-size: 24px; }
+  .spiritual-item .si-label { font-size: 11px; color: var(--text-mid); margin-top: 4px; font-weight: 600; }
+  .si-counter { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; }
+  .si-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: var(--green-deep);
+    color: white;
+    font-size: 16px; font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .si-num { font-size: 20px; font-weight: 800; color: var(--green-deep); min-width: 30px; text-align: center; }
+  .si-toggle {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--green-pale);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .si-toggle.done { background: var(--green-light); }
+
+  /* WORK CHECK */
+  .work-check-btns { display: flex; gap: 8px; margin-top: 10px; }
+  .wcb {
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--green-pale);
+    background: white;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .wcb.selected-yes { background: #e8f5e9; border-color: #4CAF81; color: #2d7a4a; }
+  .wcb.selected-no { background: #fff3e0; border-color: #ff9800; color: #e65100; }
+
+  /* COMMUTE */
+  .commute-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .commute-opt {
+    background: var(--green-pale);
+    border: 2px solid transparent;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 11px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .commute-opt.selected { background: var(--green-deep); color: white; border-color: var(--green-deep); }
+
+  /* ── LUCK / CRAZY ── */
+  .fun-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 16px 0; }
+  .fun-card {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    box-shadow: 0 1px 6px rgba(15,76,58,0.08);
+    text-align: center;
+  }
+  .fun-card .fc-icon { font-size: 28px; margin-bottom: 6px; }
+  .fun-card .fc-title { font-size: 12px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+  .fun-card .fc-msg { font-size: 11px; color: var(--text-mid); line-height: 1.4; min-height: 40px; }
+  .fun-btn {
+    margin-top: 8px;
+    background: var(--green-pale);
+    border: none;
+    border-radius: 12px;
+    padding: 6px 12px;
+    font-size: 11px; font-weight: 600;
+    color: var(--green-deep);
+    cursor: pointer;
+    width: 100%;
+  }
+  .copy-btn {
+    background: none; border: none;
+    font-size: 10px; color: var(--text-light);
+    cursor: pointer; margin-top: 4px;
+  }
+
+  /* ── MIDDAY CHECK-IN ── */
+  .midday-card {
+    background: linear-gradient(135deg, var(--gold) 0%, #e8a020 100%);
+    color: var(--green-deep);
+    border-radius: var(--radius);
+    margin: 12px 16px 0;
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+  .midday-card .mc-title { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+  .midday-card .mc-quote { font-size: 13px; font-style: italic; line-height: 1.5; }
+
+  /* ── WINS ── */
+  .wins-section { margin: 12px 16px 0; }
+  .wins-section .wins-count { font-size: 22px; font-weight: 800; color: var(--green-deep); }
+  .wins-categories { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+  .cat-btn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 2px solid var(--green-pale);
+    background: white;
+    font-size: 11px; font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cat-btn.active { background: var(--green-deep); color: white; border-color: var(--green-deep); }
+  .win-suggestion {
+    background: var(--green-pale);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: 13px;
+    color: var(--text-dark);
+    min-height: 50px;
+    line-height: 1.5;
+  }
+  .wins-btns { display: flex; gap: 8px; margin-top: 8px; }
+  .win-action-btn {
+    flex: 1; padding: 10px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-size: 12px; font-weight: 700;
+    cursor: pointer;
+  }
+  .win-generate { background: var(--green-pale); color: var(--green-deep); }
+  .win-log { background: var(--green-deep); color: white; }
+  .win-add { background: var(--gold); color: var(--green-deep); padding: 10px 14px; border-radius: var(--radius-sm); border: none; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .wins-list { margin-top: 10px; }
+  .win-item {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    font-size: 12px;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 1px 4px rgba(15,76,58,0.07);
+  }
+
+  /* ── REFLECTION ── */
+  .reflection-section { margin: 12px 16px 0; }
+  .reflect-stats { display: flex; gap: 8px; margin-bottom: 12px; }
+  .rs-box {
+    flex: 1; text-align: center;
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 10px 6px;
+    box-shadow: 0 1px 4px rgba(15,76,58,0.07);
+  }
+  .rs-num { font-size: 20px; font-weight: 800; color: var(--green-deep); }
+  .rs-label { font-size: 10px; color: var(--text-light); margin-top: 2px; }
+  .reflect-textarea {
+    width: 100%;
+    background: white;
+    border: 2px solid var(--green-pale);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: 13px;
+    min-height: 100px;
+    resize: none;
+    color: var(--text-dark);
+    font-family: inherit;
+    line-height: 1.5;
+  }
+  .reflect-textarea:focus { outline: none; border-color: var(--green-light); }
+  .mood-selector { display: flex; gap: 8px; margin: 10px 0; justify-content: center; }
+  .mood-btn {
+    font-size: 24px;
+    background: none; border: none;
+    cursor: pointer;
+    filter: grayscale(1) opacity(0.4);
+    transition: all 0.2s;
+    padding: 4px;
+    border-radius: 50%;
+  }
+  .mood-btn.selected { filter: none; transform: scale(1.2); }
+  .summary-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--green-deep);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-top: 1px solid var(--green-pale);
+    padding: 8px 0;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    display: flex;
+    box-shadow: 0 -2px 12px rgba(15,76,58,0.1);
+    z-index: 100;
+  }
+  .bn-item {
+    flex: 1; text-align: center;
+    cursor: pointer; padding: 4px 0;
+    transition: all 0.2s;
+  }
+  .bn-icon { font-size: 20px; }
+  .bn-label { font-size: 9px; color: var(--text-light); font-weight: 600; margin-top: 2px; }
+  .bn-item.active .bn-icon { filter: none; }
+  .bn-item.active .bn-label { color: var(--green-deep); font-weight: 700; }
+
+  /* ── MODALS ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    background: white;
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 540px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-title { font-size: 18px; font-weight: 800; color: var(--green-deep); margin-bottom: 16px; }
+  .modal-close {
+    float: right;
+    background: var(--green-pale);
+    border: none;
+    border-radius: 50%;
+    width: 32px; height: 32px;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--green-deep);
+  }
+  .modal-nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px; font-weight: 600;
+    color: var(--text-dark);
+  }
+  .modal-nav-item:active { background: var(--green-pale); }
+  .modal-nav-section { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.8px; margin: 10px 0 4px; }
+
+  /* REMINDER MODAL */
+  .reminder-item {
+    background: var(--green-pale);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+  .ri-time { font-size: 11px; font-weight: 700; color: var(--green-light); }
+  .ri-title { font-size: 13px; font-weight: 700; color: var(--text-dark); margin-top: 2px; }
+  .ri-desc { font-size: 12px; color: var(--text-mid); margin-top: 3px; line-height: 1.4; }
+  .enable-notif-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--green-deep);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 700;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+
+  /* SUMMARY MODAL */
+  .summary-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--green-pale);
+    font-size: 13px;
+  }
+  .summary-row .sr-label { color: var(--text-mid); }
+  .summary-row .sr-val { font-weight: 700; color: var(--text-dark); }
+
+  /* ── UTILS ── */
+  .hidden { display: none !important; }
+  .divider { height: 1px; background: var(--green-pale); margin: 12px 0; }
+  .section-gap { height: 16px; }
+  .card-full { margin: 12px 16px 0; background: white; border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+  .green-link { color: var(--green-light); font-weight: 600; cursor: pointer; text-decoration: underline; font-size: 12px; }
+
+  /* Progress bar */
+  .prog-bar { height: 6px; background: var(--green-pale); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+  .prog-fill { height: 100%; background: linear-gradient(90deg, var(--green-mid), var(--green-accent)); border-radius: 3px; transition: width 0.4s; }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+    background: var(--green-deep); color: white;
+    padding: 10px 20px; border-radius: 20px;
+    font-size: 13px; font-weight: 600;
+    z-index: 300;
+    opacity: 0; transition: opacity 0.3s;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+
+  /* HELP section */
+  .help-item { margin-bottom: 14px; }
+  .help-item .hi-q { font-size: 13px; font-weight: 700; color: var(--green-deep); margin-bottom: 4px; }
+  .help-item .hi-a { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div>
+    <div class="title">🎯 Week 8 · Focus Mode</div>
+    <div class="subtitle" id="navClock">--:-- · Cairo, Egypt</div>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <button class="nav-btn" onclick="openModal('remindersModal')" aria-label="Reminders">
+      🔔<span class="notif-badge">3</span>
+    </button>
+    <button class="nav-btn" onclick="openModal('navModal')" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<!-- NAV MODAL -->
+<div class="modal-overlay" id="navModal">
+  <div class="modal-sheet">
+    <button class="modal-close" onclick="closeModal('navModal')">✕</button>
+    <div class="modal-title">Week 8 Features 🎯</div>
+    <div class="modal-nav-section">Navigation</div>
+    <div class="modal-nav-item" onclick="scrollToTop();closeModal('navModal')">🏠 Home</div>
+    <div class="modal-nav-item" onclick="scrollToSection('glanceSection');closeModal('navModal')">📊 Week Overview</div>
+    <div class="modal-nav-item" onclick="scrollToSection('dayHeader_'+currentDay);closeModal('navModal')">☀️ Today's Plan</div>
+    <div class="modal-nav-section">Track</div>
+    <div class="modal-nav-item" onclick="scrollToSection('waterSection');closeModal('navModal')">💧 Water Tracker</div>
+    <div class="modal-nav-item" onclick="scrollToSection('prayerSection');closeModal('navModal')">🙏 Prayer & Spiritual Tracker</div>
+    <div class="modal-nav-item" onclick="scrollToSection('winsSection');closeModal('navModal')">🏆 Tiny Wins</div>
+    <div class="modal-nav-section">Reflect</div>
+    <div class="modal-nav-item" onclick="scrollToSection('reflectSection');closeModal('navModal')">📝 Day Reflection</div>
+    <div class="modal-nav-item" onclick="scrollToSection('middaySection');closeModal('navModal')">🌿 Mid-day Check-in</div>
+    <div class="modal-nav-section">Info</div>
+    <div class="modal-nav-item" onclick="scrollToSection('helpSection');closeModal('navModal')">❔ Help & Guide</div>
+  </div>
+</div>
+
+<!-- REMINDERS MODAL -->
+<div class="modal-overlay" id="remindersModal">
+  <div class="modal-sheet">
+    <button class="modal-close" onclick="closeModal('remindersModal')">✕</button>
+    <div class="modal-title">Reminders 📚</div>
+    <div style="font-size:12px;color:var(--text-mid);line-height:1.5;margin-bottom:10px;">When permission is allowed, reminders are scheduled while this app is open. For automatic background reminders, keep the PWA installed and opened regularly.</div>
+    <div class="reminder-item">
+      <div class="ri-time">5:50</div>
+      <div class="ri-title">📚 MFVA study block — morning</div>
+      <div class="ri-desc">45 min before work. Small but mighty.</div>
+    </div>
+    <div class="reminder-item">
+      <div class="ri-time">5 PM</div>
+      <div class="ri-title">🚪 Leave work at 5 PM</div>
+      <div class="ri-desc">Your evening study time depends on this.</div>
+    </div>
+    <div class="reminder-item">
+      <div class="ri-time">7:45</div>
+      <div class="ri-title">🌙 Evening MFVA session</div>
+      <div class="ri-desc">Your main study block. Protect it.</div>
+    </div>
+    <button class="enable-notif-btn" onclick="requestNotifications()">Allow & schedule today’s reminders 🔔</button>
+    <button class="modal-close" style="width:100%;margin-top:8px;float:none;border-radius:var(--radius-sm);padding:10px;background:var(--green-pale);color:var(--green-deep);font-weight:700;font-size:13px;" onclick="closeModal('remindersModal')">Close</button>
+  </div>
+</div>
+
+<!-- SUMMARY MODAL -->
+<div class="modal-overlay" id="summaryModal">
+  <div class="modal-sheet">
+    <button class="modal-close" onclick="closeModal('summaryModal')">✕ Close</button>
+    <div class="modal-title">📋 Today's Summary</div>
+    <div id="summaryContent"></div>
+    <button class="summary-btn" onclick="exportDaySummary()">Export Today Summary TXT</button>
+    <button class="summary-btn" style="background:var(--gold);color:var(--green-deep);" onclick="exportWeekSummary()">Export Full Week Summary TXT</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-greeting">Hi, Hadeer 🎯</div>
+  <div class="hero-sub">Focus Week 8 · Work + MFVA + Life</div>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="icon">🗓️</span>
+      <span id="heroDate"><strong>7 Jun 2026</strong> · Sunday</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="icon">🌙</span>
+      <span id="heroHijri"><strong>21 Dhul Hijjah</strong> · 1447 AH</span>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="icon">🕐</span>
+      <span id="heroClock">--:--</span>
+    </div>
+    <div class="hero-meta-item">
+      <span>📍 Cairo, Egypt</span>
+    </div>
+  </div>
+  <div class="hero-msg" id="heroMsg">🌿 Week 8 begins. You carried Week 7 fully — now carry Week 8 even better.</div>
+</section>
+
+<!-- WEEK GLANCE -->
+<div class="week-glance" id="glanceSection">
+  <div class="section-title">📊 Week 8 at a Glance</div>
+  <div class="week-stats">
+    <div class="stat-box">
+      <div class="stat-num" id="statTasks">0</div>
+      <div class="stat-label">Tasks Done</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="statStudy">0h</div>
+      <div class="stat-label">Study Hours</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="statStreak">8</div>
+      <div class="stat-label">Day Streak</div>
+    </div>
+  </div>
+  <div class="day-strip" id="dayStrip">
+    <div class="day-pill" data-day="sun" onclick="switchDay('sun')">
+      <div class="day-name">Sun</div><div class="day-num">7</div><div class="day-icon">💼</div>
+    </div>
+    <div class="day-pill" data-day="mon" onclick="switchDay('mon')">
+      <div class="day-name">Mon</div><div class="day-num">8</div><div class="day-icon">🌟</div>
+    </div>
+    <div class="day-pill" data-day="tue" onclick="switchDay('tue')">
+      <div class="day-name">Tue</div><div class="day-num">9</div><div class="day-icon">🤝</div>
+    </div>
+    <div class="day-pill" data-day="wed" onclick="switchDay('wed')">
+      <div class="day-name">Wed</div><div class="day-num">10</div><div class="day-icon">🎯</div>
+    </div>
+    <div class="day-pill" data-day="thu" onclick="switchDay('thu')">
+      <div class="day-name">Thu</div><div class="day-num">11</div><div class="day-icon">🏁</div>
+    </div>
+    <div class="day-pill" data-day="fri" onclick="switchDay('fri')">
+      <div class="day-name">Fri</div><div class="day-num">12</div><div class="day-icon">🕌</div>
+    </div>
+    <div class="day-pill" data-day="sat" onclick="switchDay('sat')">
+      <div class="day-name">Sat</div><div class="day-num">13</div><div class="day-icon">☀️</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- SUNDAY 7 JUN -->
+<!-- ════════════════════════════════════════════ -->
+<div class="day-section" id="day-sun">
+  <div class="day-header" id="dayHeader_sun">
+    <div class="day-title">Sunday 💼</div>
+    <div class="day-date">7 Jun 2026 · 21 Dhul Hijjah 1447</div>
+    <div class="day-badge">☀️ Work Week Start + MFVA Sprint</div>
+    <div class="day-focus">
+      <strong>Sunday — Egyptian work week begins today.</strong> Morning MFVA sprint before commute, then full work day. Protect the evening study session.
+    </div>
+  </div>
+  <div class="quick-actions">
+    <button class="qa-btn" onclick="scrollToSection('waterSection')">💧 Water</button>
+    <button class="qa-btn" onclick="scrollToSection('prayerSection')">🙏 Prayers</button>
+    <button class="qa-btn" onclick="scrollToSection('winsSection')">🏆 Wins</button>
+    <button class="qa-btn" onclick="scrollToSection('reflectSection')">📝 Reflect</button>
+  </div>
+  <div class="mfva-card">
+    <div class="label">📘 Weekly Focus</div>
+    <div class="title">MFVA — Week 8 Sprint</div>
+    <div class="desc">Morning study before commute + deep evening session. Sunday sets the tone for the whole week.</div>
+    <div class="sessions">
+      <div class="session-tag">🌅 Morning 45 min</div>
+      <div class="session-tag">🌙 Evening 2 hrs</div>
+    </div>
+  </div>
+  <div class="timeline" id="timeline_sun">
+    <div class="section-title" style="margin:0 0 8px;">Sunday Schedule</div>
+    <div class="timeline-item study" onclick="toggleItem(this)"><div class="tl-icon">🚿</div><div class="tl-content"><div class="tl-time">5:00 AM</div><div class="tl-title">Wake Up & Shower</div><div class="tl-desc">Week 8 Day 1. Your discipline is your identity, Hadeer.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📖</div><div class="tl-content"><div class="tl-time">5:15 AM</div><div class="tl-title">Fajr Prayer & Quran</div><div class="tl-desc">The heart finds rest in the remembrance of Allah. — Quran 13:28</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📿</div><div class="tl-content"><div class="tl-time">5:45 AM</div><div class="tl-title">Morning Zekr & Duaa</div><div class="tl-desc">Subhanaallah · Alhamdulillah · Allahu Akbar. Ya Allah — bless Week 8.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">5:50 AM</div><div class="tl-title">MFVA Study — 45 min</div><div class="tl-desc">Week 8 opens with an MFVA win before the commute. Lecture review or assignment progress.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">👔</div><div class="tl-content"><div class="tl-time">6:35 AM</div><div class="tl-title">Prepare for Work</div><div class="tl-desc">Breakfast + get ready. You are the person you are building toward.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🚗</div><div class="tl-content"><div class="tl-time">7:45 AM</div><div class="tl-title">Commute to Work — 1 hr</div><div class="tl-desc">Zekr on the commute. That hour is sacred to Allah.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">💼</div><div class="tl-content"><div class="tl-time">8:45 AM</div><div class="tl-title">Work — 9 to 5</div><div class="tl-desc">Give work your full professional best. Your evenings belong to MFVA.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">1:00 PM</div><div class="tl-title">Dhuhr Prayer</div><div class="tl-desc">Stop. Pray. Reset. This is Hadeer's way.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">4:30 PM</div><div class="tl-title">Asr Prayer</div><div class="tl-desc">Guard strictly the prayers. — Quran 2:238</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🚌</div><div class="tl-content"><div class="tl-time">5:00 PM</div><div class="tl-title">Head Home — 1 hr commute</div><div class="tl-desc">Zekr on the way home. Plan tonight's MFVA session mentally.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🍽️</div><div class="tl-content"><div class="tl-time">6:15 PM</div><div class="tl-title">Dinner</div><div class="tl-desc">Eat well. Your brain needs fuel for 2 hours of study.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌅</div><div class="tl-content"><div class="tl-time">7:30 PM</div><div class="tl-title">Maghrib Prayer</div><div class="tl-desc">Pause everything. Allah first. MFVA will be there in 10 minutes.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">7:45 PM</div><div class="tl-title">MFVA Deep Session — 2 hours</div><div class="tl-desc">Main study block. Assignments, lectures, case analysis. Protect this time fiercely.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌙</div><div class="tl-content"><div class="tl-time">9:45 PM</div><div class="tl-title">Isha Prayer & Evening Zekr</div><div class="tl-desc">End every day with Allah. He sees every effort. Alhamdulillah.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">👨‍👩‍👧</div><div class="tl-content"><div class="tl-time">10:00 PM</div><div class="tl-title">Family Connection — 20 min</div><div class="tl-desc">A kind word, a hug, a quick chat. Your people matter even in busy weeks.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">😴</div><div class="tl-content"><div class="tl-time">10:45 PM</div><div class="tl-title">Sleep</div><div class="tl-desc">Day 1 of Week 8 done. Sleep deeply, Hadeer. 🌿</div></div><div class="tl-check">✓</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- MONDAY 8 JUN -->
+<!-- ════════════════════════════════════════════ -->
+<div class="day-section" id="day-mon">
+  <div class="day-header" id="dayHeader_mon">
+    <div class="day-title">Monday 🌟</div>
+    <div class="day-date">8 Jun 2026 · 22 Dhul Hijjah 1447</div>
+    <div class="day-badge">🎯 MFVA + Work</div>
+    <div class="day-focus">
+      <strong>Morning MFVA 45 min before work.</strong> Full work day, then deep evening study session. Show up for both — you can hold it all.
+    </div>
+  </div>
+  <div class="quick-actions">
+    <button class="qa-btn" onclick="scrollToSection('waterSection')">💧 Water</button>
+    <button class="qa-btn" onclick="scrollToSection('prayerSection')">🙏 Prayers</button>
+    <button class="qa-btn" onclick="scrollToSection('winsSection')">🏆 Wins</button>
+    <button class="qa-btn" onclick="scrollToSection('reflectSection')">📝 Reflect</button>
+  </div>
+  <div class="mfva-card">
+    <div class="label">📘 Today</div>
+    <div class="title">Full Focus Day</div>
+    <div class="desc">Work excellence in the day. MFVA excellence in the evening. Two roles, one Hadeer.</div>
+    <div class="sessions">
+      <div class="session-tag">🌅 Now 🌿 MFVA study block</div>
+      <div class="session-tag">💼 Later Work + commute</div>
+    </div>
+  </div>
+  <div class="timeline" id="timeline_mon">
+    <div class="section-title" style="margin:0 0 8px;">Monday Schedule</div>
+    <div class="timeline-item study" onclick="toggleItem(this)"><div class="tl-icon">🚿</div><div class="tl-content"><div class="tl-time">5:00 AM</div><div class="tl-title">Wake Up & Shower</div><div class="tl-desc">Week 8, Day 2. The streak continues.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📖</div><div class="tl-content"><div class="tl-time">5:15 AM</div><div class="tl-title">Fajr Prayer & Quran</div><div class="tl-desc">The best beginning to any day.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📿</div><div class="tl-content"><div class="tl-time">5:45 AM</div><div class="tl-title">Morning Zekr & Duaa</div><div class="tl-desc">Ya Allah — bless my work, my studies, and my intentions today.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">5:50 AM</div><div class="tl-title">MFVA Study — 45 min</div><div class="tl-desc">Monday morning sharpness. Make this block count.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">👔</div><div class="tl-content"><div class="tl-time">6:35 AM</div><div class="tl-title">Prepare for Work</div><div class="tl-desc">Dressed. Breakfast. Ready. The week belongs to you.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🚗</div><div class="tl-content"><div class="tl-time">7:45 AM</div><div class="tl-title">Commute to Work — 1 hr</div><div class="tl-desc">Zekr commute. That hour is yours and Allah's.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">💼</div><div class="tl-content"><div class="tl-time">8:45 AM</div><div class="tl-title">Work — 9 to 5</div><div class="tl-desc">Monday energy. Full presence. Leave at 5 PM without guilt.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">1:00 PM</div><div class="tl-title">Dhuhr Prayer</div><div class="tl-desc">Mid-day reset. Breathe. Pray. Return sharper.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">4:30 PM</div><div class="tl-title">Asr Prayer</div><div class="tl-desc">Afternoon pause before the commute home.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🚌</div><div class="tl-content"><div class="tl-time">5:00 PM</div><div class="tl-title">Commute Home — 1 hr</div><div class="tl-desc">Plan your MFVA session during commute. What will you finish tonight?</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🍽️</div><div class="tl-content"><div class="tl-time">6:15 PM</div><div class="tl-title">Dinner</div><div class="tl-desc">Eat, rest 15 minutes. Then into study mode.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌅</div><div class="tl-content"><div class="tl-time">7:30 PM</div><div class="tl-title">Maghrib Prayer</div><div class="tl-desc">10 minutes with Allah before 2 hours with MFVA.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">7:45 PM</div><div class="tl-title">MFVA Deep Session — 2 hours</div><div class="tl-desc">Assignments, lectures, notes. No phone. Full concentration.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌙</div><div class="tl-content"><div class="tl-time">9:45 PM</div><div class="tl-title">Isha Prayer & Evening Zekr</div><div class="tl-desc">Alhamdulillah for today. Close the day in His remembrance.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">😴</div><div class="tl-content"><div class="tl-time">10:30 PM</div><div class="tl-title">Sleep</div><div class="tl-desc">Two full days done. Rest well, Hadeer. 🌿</div></div><div class="tl-check">✓</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- TUESDAY 9 JUN -->
+<!-- ════════════════════════════════════════════ -->
+<div class="day-section" id="day-tue">
+  <div class="day-header" id="dayHeader_tue">
+    <div class="day-title">Tuesday 🤝</div>
+    <div class="day-date">9 Jun 2026 · 23 Dhul Hijjah 1447</div>
+    <div class="day-badge">🎯 Work + MFVA</div>
+    <div class="day-focus">
+      <strong>Tuesday momentum.</strong> Show up fully at work, then switch into student mode. Two 45-min sessions bookending your commute plus a deep evening block.
+    </div>
+  </div>
+  <div class="quick-actions">
+    <button class="qa-btn" onclick="scrollToSection('waterSection')">💧 Water</button>
+    <button class="qa-btn" onclick="scrollToSection('prayerSection')">🙏 Prayers</button>
+    <button class="qa-btn" onclick="scrollToSection('winsSection')">🏆 Wins</button>
+    <button class="qa-btn" onclick="scrollToSection('reflectSection')">📝 Reflect</button>
+  </div>
+  <div class="mfva-card">
+    <div class="label">📘 Today</div>
+    <div class="title">Work Excellence + MFVA Evening</div>
+    <div class="desc">Tuesday energy. Full presence at work, then full presence for MFVA. You hold both.</div>
+    <div class="sessions">
+      <div class="session-tag">🌅 Morning 🌿 MFVA 45 min</div>
+      <div class="session-tag">📘 Evening MFVA deep 2 hrs</div>
+    </div>
+  </div>
+  <div class="timeline" id="timeline_tue">
+    <div class="section-title" style="margin:0 0 8px;">Tuesday Schedule</div>
+    <div class="timeline-item study" onclick="toggleItem(this)"><div class="tl-icon">🚿</div><div class="tl-content"><div class="tl-time">5:00 AM</div><div class="tl-title">Wake Up & Shower</div><div class="tl-desc">Week 8, Day 3. The streak is real.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📖</div><div class="tl-content"><div class="tl-time">5:15 AM</div><div class="tl-title">Fajr Prayer & Quran</div><div class="tl-desc">The best beginning to any day.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📿</div><div class="tl-content"><div class="tl-time">5:45 AM</div><div class="tl-title">Morning Zekr & Duaa</div><div class="tl-desc">Ya Allah — bless Tuesday. Bless the work and the study.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">5:50 AM</div><div class="tl-title">MFVA Study — 45 min</div><div class="tl-desc">Tuesday morning sharpness. Make this block count.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">👔</div><div class="tl-content"><div class="tl-time">6:35 AM</div><div class="tl-title">Prepare for Work</div><div class="tl-desc">Dressed. Breakfast. Ready. The week belongs to you.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🚗</div><div class="tl-content"><div class="tl-time">7:45 AM</div><div class="tl-title">Commute to Work — 1 hr</div><div class="tl-desc">Zekr commute. Plan tonight's MFVA session.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">💼</div><div class="tl-content"><div class="tl-time">8:45 AM</div><div class="tl-title">Work — 9 to 5</div><div class="tl-desc">Tuesday energy. Full presence. Leave at 5 PM without guilt.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">1:00 PM</div><div class="tl-title">Dhuhr Prayer</div><div class="tl-desc">Mid-day reset. Breathe. Pray. Return sharper.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">4:30 PM</div><div class="tl-title">Asr Prayer</div><div class="tl-desc">Afternoon pause before the commute home.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🚌</div><div class="tl-content"><div class="tl-time">5:00 PM</div><div class="tl-title">Commute Home — 1 hr</div><div class="tl-desc">Zekr on the way home. What will you finish in MFVA tonight?</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🍽️</div><div class="tl-content"><div class="tl-time">6:15 PM</div><div class="tl-title">Dinner</div><div class="tl-desc">Eat, rest 15 minutes. Then into study mode.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌅</div><div class="tl-content"><div class="tl-time">7:30 PM</div><div class="tl-title">Maghrib Prayer</div><div class="tl-desc">10 minutes with Allah before 2 hours with MFVA.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">7:45 PM</div><div class="tl-title">MFVA Deep Session — 2 hours</div><div class="tl-desc">Assignments, lectures, notes. No phone. Full concentration. This is your MFVA time.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌙</div><div class="tl-content"><div class="tl-time">9:45 PM</div><div class="tl-title">Isha Prayer & Evening Zekr</div><div class="tl-desc">Alhamdulillah for today. Close the day in His remembrance.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">😴</div><div class="tl-content"><div class="tl-time">10:30 PM</div><div class="tl-title">Sleep</div><div class="tl-desc">Three full days done. Rest well, Hadeer. 🌿</div></div><div class="tl-check">✓</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- WEDNESDAY 10 JUN -->
+<!-- ════════════════════════════════════════════ -->
+<div class="day-section" id="day-wed">
+  <div class="day-header" id="dayHeader_wed">
+    <div class="day-title">Wednesday 🎯</div>
+    <div class="day-date">10 Jun 2026 · 24 Dhul Hijjah 1447</div>
+    <div class="day-badge">🎯 Mid-week Focus + Social Evening</div>
+    <div class="day-focus">
+      <strong>Balance day.</strong> Study hard in the morning. Enjoy your people fully tonight. Joy and discipline are not opposites — they fuel each other.
+    </div>
+  </div>
+  <div class="quick-actions">
+    <button class="qa-btn" onclick="scrollToSection('waterSection')">💧 Water</button>
+    <button class="qa-btn" onclick="scrollToSection('prayerSection')">🙏 Prayers</button>
+    <button class="qa-btn" onclick="scrollToSection('winsSection')">🏆 Wins</button>
+    <button class="qa-btn" onclick="scrollToSection('reflectSection')">📝 Reflect</button>
+  </div>
+  <div class="mfva-card">
+    <div class="label">🤝 Today</div>
+    <div class="title">Social Wednesday</div>
+    <div class="desc">Morning MFVA so your evening is guilt-free. Work fully. Then show up for your people.</div>
+    <div class="sessions">
+      <div class="session-tag">📘 Morning MFVA 45 min</div>
+      <div class="session-tag">🤝 Evening Social time</div>
+    </div>
+  </div>
+  <div class="timeline" id="timeline_wed">
+    <div class="section-title" style="margin:0 0 8px;">Wednesday Schedule</div>
+    <div class="timeline-item study" onclick="toggleItem(this)"><div class="tl-icon">🚿</div><div class="tl-content"><div class="tl-time">5:00 AM</div><div class="tl-title">Wake Up & Shower</div><div class="tl-desc">Social day still starts with discipline, Hadeer.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📖</div><div class="tl-content"><div class="tl-time">5:15 AM</div><div class="tl-title">Fajr Prayer & Quran</div><div class="tl-desc">Start every day — even social ones — with Allah first.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📿</div><div class="tl-content"><div class="tl-time">5:45 AM</div><div class="tl-title">Morning Zekr & Duaa</div><div class="tl-desc">The best of people bring benefit to others. — Prophet ﷺ</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">5:50 AM</div><div class="tl-title">MFVA Study — 45 min</div><div class="tl-desc">Morning study so your evening is guilt-free. Make it count.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">👔</div><div class="tl-content"><div class="tl-time">6:35 AM</div><div class="tl-title">Prepare for Work</div><div class="tl-desc">Today you leave work and go somewhere fun. Dress for it.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🚗</div><div class="tl-content"><div class="tl-time">7:45 AM</div><div class="tl-title">Commute to Work — 1 hr</div><div class="tl-desc">Zekr or simply enjoy the quiet. You earned tonight.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">💼</div><div class="tl-content"><div class="tl-time">8:45 AM</div><div class="tl-title">Work — 9 to 5</div><div class="tl-desc">Work fully. Tonight is for your people.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">1:00 PM</div><div class="tl-title">Dhuhr Prayer</div><div class="tl-desc">Stop. Pray. Reset.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">4:30 PM</div><div class="tl-title">Asr Prayer</div><div class="tl-desc">Almost time for the fun part of today.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🤝</div><div class="tl-content"><div class="tl-time">5:15 PM</div><div class="tl-title">Head to Social Plan</div><div class="tl-desc">Dinner, café, walk, movie — your call. Show up fully present.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌅</div><div class="tl-content"><div class="tl-time">7:30 PM</div><div class="tl-title">Maghrib Prayer</div><div class="tl-desc">Even on social evenings, Hadeer pauses for Maghrib. That is who she is.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">😄</div><div class="tl-content"><div class="tl-time">7:45 PM</div><div class="tl-title">Social Time — be fully present</div><div class="tl-desc">Phone in your bag. Laugh. Connect. You earned this completely.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌙</div><div class="tl-content"><div class="tl-time">9:30 PM</div><div class="tl-title">Isha Prayer & Head Home</div><div class="tl-desc">Close the evening with Allah. Head home with a full heart.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">10:30 PM</div><div class="tl-title">MFVA Quick Review — 20 min</div><div class="tl-desc">Just 20 minutes. Read notes, preview tomorrow. Keep the momentum.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">😴</div><div class="tl-content"><div class="tl-time">11:00 PM</div><div class="tl-title">Sleep</div><div class="tl-desc">A day with both work and joy. That is balance, Hadeer. 🌿</div></div><div class="tl-check">✓</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- THURSDAY 11 JUN -->
+<!-- ════════════════════════════════════════════ -->
+<div class="day-section" id="day-thu">
+  <div class="day-header" id="dayHeader_thu">
+    <div class="day-title">Thursday 🏁</div>
+    <div class="day-date">11 Jun 2026 · 25 Dhul Hijjah 1447</div>
+    <div class="day-badge">💪 Last Work Day + MFVA Wrap</div>
+    <div class="day-focus">
+      <strong>Last full work day of Week 8.</strong> Push through, then prep for the weekend study sprint. What you complete tonight creates your Thursday freedom.
+    </div>
+  </div>
+  <div class="quick-actions">
+    <button class="qa-btn" onclick="scrollToSection('waterSection')">💧 Water</button>
+    <button class="qa-btn" onclick="scrollToSection('prayerSection')">🙏 Prayers</button>
+    <button class="qa-btn" onclick="scrollToSection('winsSection')">🏆 Wins</button>
+    <button class="qa-btn" onclick="scrollToSection('reflectSection')">📝 Reflect</button>
+  </div>
+  <div class="mfva-card">
+    <div class="label">🏁 Today</div>
+    <div class="title">End of Work Week 💪</div>
+    <div class="desc">Last full work day. Push through, then prep for the Jumu'ah + weekend study sprint.</div>
+    <div class="sessions">
+      <div class="session-tag">💼 Today Last work day</div>
+      <div class="session-tag">📘 Tonight MFVA 2 hrs</div>
+    </div>
+  </div>
+  <div class="timeline" id="timeline_thu">
+    <div class="section-title" style="margin:0 0 8px;">Thursday Schedule</div>
+    <div class="timeline-item study" onclick="toggleItem(this)"><div class="tl-icon">🚿</div><div class="tl-content"><div class="tl-time">5:00 AM</div><div class="tl-title">Wake Up & Shower</div><div class="tl-desc">Thursday. One more work day. You have done harder things.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📖</div><div class="tl-content"><div class="tl-time">5:15 AM</div><div class="tl-title">Fajr Prayer & Quran</div><div class="tl-desc">Jumu'ah is tomorrow — extra Quran today, Hadeer.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📿</div><div class="tl-content"><div class="tl-time">5:45 AM</div><div class="tl-title">Morning Zekr & Duaa</div><div class="tl-desc">Thursday morning. The weekend is close. Keep going.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">5:50 AM</div><div class="tl-title">MFVA Study — 45 min</div><div class="tl-desc">Thursday morning. Review what you wrote Wednesday. Solidify understanding.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">👔</div><div class="tl-content"><div class="tl-time">6:35 AM</div><div class="tl-title">Prepare for Work</div><div class="tl-desc">Last work morning of the week. Make it count.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🚗</div><div class="tl-content"><div class="tl-time">7:45 AM</div><div class="tl-title">Commute to Work — 1 hr</div><div class="tl-desc">Plan Jumu'ah and weekend MFVA sprint during commute.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">💼</div><div class="tl-content"><div class="tl-time">8:45 AM</div><div class="tl-title">Work — 9 to 5</div><div class="tl-desc">Final push. Wrap up tasks. Leave clean for the weekend.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">1:00 PM</div><div class="tl-title">Dhuhr Prayer</div><div class="tl-desc">Thursday Dhuhr. One more prayer before the weekend begins.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">4:30 PM</div><div class="tl-title">Asr Prayer</div><div class="tl-desc">5 PM soon. Home, dinner, MFVA awaits.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🚌</div><div class="tl-content"><div class="tl-time">5:00 PM</div><div class="tl-title">Commute Home — 1 hr</div><div class="tl-desc">Last commute of the work week. Reflect on Week 8's wins so far.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🍽️</div><div class="tl-content"><div class="tl-time">6:15 PM</div><div class="tl-title">Dinner</div><div class="tl-desc">Nourish yourself. Big MFVA session ahead.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌅</div><div class="tl-content"><div class="tl-time">7:30 PM</div><div class="tl-title">Maghrib Prayer</div><div class="tl-desc">Thursday evening Maghrib. Make duaa for Jumu'ah tomorrow.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">7:45 PM</div><div class="tl-title">MFVA Deep Session — 2 hours</div><div class="tl-desc">Write, finalise, submit what you can. What you complete here creates your Jumu'ah freedom.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">👨‍👩‍👧</div><div class="tl-content"><div class="tl-time">9:45 PM</div><div class="tl-title">Family / Call a Friend</div><div class="tl-desc">Thursday night. Connect with someone you love. 20 minutes of real human warmth.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌙</div><div class="tl-content"><div class="tl-time">10:00 PM</div><div class="tl-title">Isha Prayer & Evening Zekr</div><div class="tl-desc">5 work days, 5 MFVA sessions. Alhamdulillah, Hadeer.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">😴</div><div class="tl-content"><div class="tl-time">10:30 PM</div><div class="tl-title">Sleep</div><div class="tl-desc">Work week done. Rest well. 🌿</div></div><div class="tl-check">✓</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- FRIDAY 12 JUN -->
+<!-- ════════════════════════════════════════════ -->
+<div class="day-section" id="day-fri">
+  <div class="day-header" id="dayHeader_fri">
+    <div class="day-title">Friday 🕌</div>
+    <div class="day-date">12 Jun 2026 · 26 Dhul Hijjah 1447</div>
+    <div class="day-badge">🕌 Jumu'ah + MFVA Day</div>
+    <div class="day-focus">
+      <strong>No work. A full day for prayer, rest, and deep MFVA study.</strong> A gift of time. Use it fully — read Surah Al-Kahf, attend Jumu'ah, and let the afternoon belong to your books.
+    </div>
+  </div>
+  <div class="quick-actions">
+    <button class="qa-btn" onclick="scrollToSection('waterSection')">💧 Water</button>
+    <button class="qa-btn" onclick="scrollToSection('prayerSection')">🙏 Prayers</button>
+    <button class="qa-btn" onclick="scrollToSection('winsSection')">🏆 Wins</button>
+    <button class="qa-btn" onclick="scrollToSection('reflectSection')">📝 Reflect</button>
+  </div>
+  <div class="mfva-card">
+    <div class="label">🕌 Friday</div>
+    <div class="title">Sacred + Productive 🌟</div>
+    <div class="desc">No commute. No work. This is your biggest MFVA opportunity of the week. After Jumu'ah, the afternoon is yours.</div>
+    <div class="sessions">
+      <div class="session-tag">🕌 Morning Jumu'ah prayer</div>
+      <div class="session-tag">📘 Afternoon MFVA 3+ hrs</div>
+    </div>
+  </div>
+  <div class="timeline" id="timeline_fri">
+    <div class="section-title" style="margin:0 0 8px;">Friday Schedule</div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🌟</div><div class="tl-content"><div class="tl-time">7:00 AM</div><div class="tl-title">Sleep In — Rest</div><div class="tl-desc">You worked hard all week. Your body needs extra sleep on Fridays.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer highlight" onclick="toggleItem(this)"><div class="tl-icon">📖</div><div class="tl-content"><div class="tl-time">8:00 AM</div><div class="tl-title">Fajr Prayer + Surah Al-Kahf</div><div class="tl-desc">Friday Quran. Read Surah Al-Kahf today — it is the Prophet's ﷺ sunnah for Jumu'ah.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📿</div><div class="tl-content"><div class="tl-time">8:30 AM</div><div class="tl-title">Morning Zekr + Salawat</div><div class="tl-desc">Send extra salawat on the Prophet ﷺ today. Friday is His day.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer highlight" onclick="toggleItem(this)"><div class="tl-icon">🕌</div><div class="tl-content"><div class="tl-time">12:30 PM</div><div class="tl-title">Jumu'ah Prayer</div><div class="tl-desc">Leave early. Listen to the khutbah fully. Make duaa. This hour is sacred.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🍽️</div><div class="tl-content"><div class="tl-time">1:30 PM</div><div class="tl-title">Friday Lunch</div><div class="tl-desc">Eat something you love. You earned a slow, nourishing meal today.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">2:30 PM</div><div class="tl-title">MFVA Deep Session — 3 hours</div><div class="tl-desc">No commute. No work. This is your biggest study opportunity of the week. Use it fully.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">4:30 PM</div><div class="tl-title">Asr Prayer</div><div class="tl-desc">Pause mid-session. Pray. Come back refreshed.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">☕</div><div class="tl-content"><div class="tl-time">5:30 PM</div><div class="tl-title">Social — Café / Family / Call</div><div class="tl-desc">Friday afternoon social time. Café run, family dinner, or a long call with someone you love.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌅</div><div class="tl-content"><div class="tl-time">7:30 PM</div><div class="tl-title">Maghrib Prayer</div><div class="tl-desc">Friday Maghrib. One of the most beautiful prayers of the week.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">8:00 PM</div><div class="tl-title">MFVA Evening Review — 1 hr</div><div class="tl-desc">Light session. Consolidate what you studied today. Preview Week 9.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer highlight" onclick="toggleItem(this)"><div class="tl-icon">🌙</div><div class="tl-content"><div class="tl-time">9:15 PM</div><div class="tl-title">Isha Prayer & Duaa</div><div class="tl-desc">Friday night duaa. Make your biggest asks tonight — this is a special time for answered prayers.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">📋</div><div class="tl-content"><div class="tl-time">9:45 PM</div><div class="tl-title">Week 8 Review + Week 9 Plan — 30 min</div><div class="tl-desc">What did you achieve this week? What moves to Week 9? Write it down, close the week cleanly.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">😴</div><div class="tl-content"><div class="tl-time">10:30 PM</div><div class="tl-title">Sleep</div><div class="tl-desc">End of a beautiful, productive, spiritual Friday. Weekend reset begins. 🌙</div></div><div class="tl-check">✓</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- SATURDAY 13 JUN -->
+<!-- ════════════════════════════════════════════ -->
+<div class="day-section" id="day-sat">
+  <div class="day-header" id="dayHeader_sat">
+    <div class="day-title">Saturday ☀️</div>
+    <div class="day-date">13 Jun 2026 · 27 Dhul Hijjah 1447</div>
+    <div class="day-badge">☀️ Weekend Reset + MFVA Review</div>
+    <div class="day-focus">
+      <strong>No work. No commute.</strong> A calm Saturday for rest, family, light MFVA review, and closing Week 8 properly before Week 9 starts.
+    </div>
+  </div>
+  <div class="quick-actions">
+    <button class="qa-btn" onclick="scrollToSection('waterSection')">💧 Water</button>
+    <button class="qa-btn" onclick="scrollToSection('prayerSection')">🙏 Prayers</button>
+    <button class="qa-btn" onclick="scrollToSection('winsSection')">🏆 Wins</button>
+    <button class="qa-btn" onclick="scrollToSection('reflectSection')">📝 Reflect</button>
+  </div>
+  <div class="mfva-card">
+    <div class="label">☀️ Saturday</div>
+    <div class="title">Reset + Review 🌿</div>
+    <div class="desc">Keep it lighter than Friday: review, organize notes, close open loops, and prepare your Week 9 priorities.</div>
+    <div class="sessions">
+      <div class="session-tag">📘 Afternoon MFVA 2 hrs</div>
+      <div class="session-tag">📋 Week review 30 min</div>
+    </div>
+  </div>
+  <div class="timeline" id="timeline_sat">
+    <div class="section-title" style="margin:0 0 8px;">Saturday Schedule</div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🌟</div><div class="tl-content"><div class="tl-time">7:00 AM</div><div class="tl-title">Sleep In — Rest</div><div class="tl-desc">You worked hard all week. Your body needs extra sleep and a slow start.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📖</div><div class="tl-content"><div class="tl-time">8:00 AM</div><div class="tl-title">Fajr Prayer + Quran</div><div class="tl-desc">Start Saturday calmly with Quran and gratitude.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">📿</div><div class="tl-content"><div class="tl-time">8:30 AM</div><div class="tl-title">Morning Zekr</div><div class="tl-desc">Subhanaallah · Alhamdulillah · Allahu Akbar. Close the week with a quiet heart.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🍳</div><div class="tl-content"><div class="tl-time">9:00 AM</div><div class="tl-title">Slow Breakfast</div><div class="tl-desc">No rushing. Let your nervous system recover.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🏠</div><div class="tl-content"><div class="tl-time">10:00 AM</div><div class="tl-title">Home Reset</div><div class="tl-desc">Light cleaning, laundry, planning, or anything that makes next week easier.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">12:30 PM</div><div class="tl-title">Dhuhr Prayer</div><div class="tl-desc">Pause and reset before the afternoon.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">🍽️</div><div class="tl-content"><div class="tl-time">1:30 PM</div><div class="tl-title">Saturday Lunch</div><div class="tl-desc">Eat something nourishing and gentle.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study highlight" onclick="toggleItem(this)"><div class="tl-icon">📘</div><div class="tl-content"><div class="tl-time">2:30 PM</div><div class="tl-title">MFVA Review Session — 2 hours</div><div class="tl-desc">Review notes, finish small gaps, and organize what should move to Week 9.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🙏</div><div class="tl-content"><div class="tl-time">4:30 PM</div><div class="tl-title">Asr Prayer</div><div class="tl-desc">Pause mid-afternoon. Pray, breathe, continue gently.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">☕</div><div class="tl-content"><div class="tl-time">5:30 PM</div><div class="tl-title">Social / Family Time</div><div class="tl-desc">Café, family, a call, or a small outing. Saturday should feel human.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌅</div><div class="tl-content"><div class="tl-time">7:30 PM</div><div class="tl-title">Maghrib Prayer</div><div class="tl-desc">Evening pause. Thank Allah for the week.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item study" onclick="toggleItem(this)"><div class="tl-icon">📋</div><div class="tl-content"><div class="tl-time">8:00 PM</div><div class="tl-title">Week 8 Review + Week 9 Plan — 30 min</div><div class="tl-desc">What did you achieve? What moves to Week 9? Write it down and close the week cleanly.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item prayer" onclick="toggleItem(this)"><div class="tl-icon">🌙</div><div class="tl-content"><div class="tl-time">9:15 PM</div><div class="tl-title">Isha Prayer & Duaa</div><div class="tl-desc">End the week with gratitude, clarity, and duaa.</div></div><div class="tl-check">✓</div></div>
+    <div class="timeline-item" onclick="toggleItem(this)"><div class="tl-icon">😴</div><div class="tl-content"><div class="tl-time">10:30 PM</div><div class="tl-title">Sleep</div><div class="tl-desc">Week 8 complete. Rest deeply and start Week 9 clean. 🌿</div></div><div class="tl-check">✓</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- SHARED TRACKERS (shown for all days) -->
+<!-- ════════════════════════════════════════════ -->
+
+<!-- WATER -->
+<div class="full-tracker" id="waterSection">
+  <div class="section-title">💧 Water Tracker</div>
+  <div style="font-size:12px;color:var(--text-light);margin-bottom:10px;">Goal: 8 glasses · Tap each drop as you drink</div>
+  <div class="water-drops" id="waterDrops">
+    <span class="drop" onclick="toggleDrop(0)">💧</span>
+    <span class="drop" onclick="toggleDrop(1)">💧</span>
+    <span class="drop" onclick="toggleDrop(2)">💧</span>
+    <span class="drop" onclick="toggleDrop(3)">💧</span>
+    <span class="drop" onclick="toggleDrop(4)">💧</span>
+    <span class="drop" onclick="toggleDrop(5)">💧</span>
+    <span class="drop" onclick="toggleDrop(6)">💧</span>
+    <span class="drop" onclick="toggleDrop(7)">💧</span>
+  </div>
+  <div class="prog-bar" style="margin-top:10px;"><div class="prog-fill" id="waterProg" style="width:0%"></div></div>
+  <div style="font-size:11px;color:var(--text-light);margin-top:4px;" id="waterLabel">0 / 8 glasses</div>
+</div>
+
+<!-- PRAYERS -->
+<div class="full-tracker" id="prayerSection">
+  <div class="section-title">🙏 Prayer & Spiritual Tracker · Cairo Prayers</div>
+  <div style="font-size:11px;color:var(--text-light);margin-bottom:8px;">Approx. Cairo times for this week — confirm with your preferred prayer app.</div>
+  <div class="prayer-list">
+    <div class="prayer-item"><span class="prayer-name">Fajr</span><span class="prayer-time">4:04 AM</span><div class="prayer-check" onclick="togglePrayer(this)">✓</div></div>
+    <div class="prayer-item"><span class="prayer-name">Dhuhr</span><span class="prayer-time">12:05 PM</span><div class="prayer-check" onclick="togglePrayer(this)">✓</div></div>
+    <div class="prayer-item"><span class="prayer-name">Asr</span><span class="prayer-time">3:39 PM</span><div class="prayer-check" onclick="togglePrayer(this)">✓</div></div>
+    <div class="prayer-item"><span class="prayer-name">Maghrib</span><span class="prayer-time">7:24 PM</span><div class="prayer-check" onclick="togglePrayer(this)">✓</div></div>
+    <div class="prayer-item"><span class="prayer-name">Isha</span><span class="prayer-time">8:57 PM</span><div class="prayer-check" onclick="togglePrayer(this)">✓</div></div>
+  </div>
+  <div class="spiritual-grid">
+    <div class="spiritual-item">
+      <div class="si-icon">📖</div>
+      <div class="si-label">Quran Pages</div>
+      <div class="si-counter">
+        <button class="si-btn" onclick="adjustSi('quran',-1)">−</button>
+        <div class="si-num" id="quranCount">0</div>
+        <button class="si-btn" onclick="adjustSi('quran',1)">+</button>
+      </div>
+    </div>
+    <div class="spiritual-item">
+      <div class="si-icon">📿</div>
+      <div class="si-label">Zekr Sets</div>
+      <div class="si-counter">
+        <button class="si-btn" onclick="adjustSi('zekr',-1)">−</button>
+        <div class="si-num" id="zekrCount">0</div>
+        <button class="si-btn" onclick="adjustSi('zekr',1)">+</button>
+      </div>
+    </div>
+    <div class="spiritual-item">
+      <div class="si-icon">💚</div>
+      <div class="si-label">Sadaqa ✓</div>
+      <button class="si-toggle" id="sadaqaToggle" onclick="toggleSi('sadaqa')">🤍</button>
+    </div>
+    <div class="spiritual-item">
+      <div class="si-icon">🤲</div>
+      <div class="si-label">Good Deed</div>
+      <button class="si-toggle" id="deedToggle" onclick="toggleSi('deed')">🤍</button>
+    </div>
+  </div>
+</div>
+
+<!-- WORK CHECK -->
+<div class="full-tracker" id="workSection">
+  <div class="section-title">💼 Work Hours Check</div>
+  <div style="font-size:12px;color:var(--text-mid);line-height:1.5;">Did you leave work at 5 PM today? Your MFVA evening session depends on this. Leaving on time IS a study decision.</div>
+  <div class="work-check-btns">
+    <button class="wcb" id="wcbYes" onclick="setWork('yes')">✅ Left at 5 PM</button>
+    <button class="wcb" id="wcbNo" onclick="setWork('no')">⚠️ Stayed late</button>
+  </div>
+</div>
+
+<!-- COMMUTE -->
+<div class="full-tracker" id="commuteSection">
+  <div class="section-title">🚗 Commute — What did you do?</div>
+  <div class="commute-options">
+    <span class="commute-opt" onclick="toggleCommute(this)">📚 MFVA Audio</span>
+    <span class="commute-opt" onclick="toggleCommute(this)">🎧 Podcast</span>
+    <span class="commute-opt" onclick="toggleCommute(this)">🎵 Music</span>
+    <span class="commute-opt" onclick="toggleCommute(this)">📞 Called someone</span>
+    <span class="commute-opt" onclick="toggleCommute(this)">🤔 Deep thinking</span>
+    <span class="commute-opt" onclick="toggleCommute(this)">🙏 Dhikr</span>
+    <span class="commute-opt" onclick="toggleCommute(this)">📵 Resting</span>
+    <span class="commute-opt" onclick="toggleCommute(this)">👀 Observing</span>
+    <span class="commute-opt" onclick="toggleCommute(this)">💭 Planning</span>
+  </div>
+</div>
+
+<!-- LUCK -->
+<div class="fun-cards">
+  <div class="fun-card">
+    <div class="fc-icon">🍀</div>
+    <div class="fc-title">Check Your Luck</div>
+    <div class="fc-msg" id="luckMsg">Your luck message is waiting 🌿</div>
+    <button class="fun-btn" onclick="getLuck()">Check my luck 🍀</button>
+    <button class="copy-btn" onclick="copyText('luckMsg')">Copy</button>
+    <div style="font-size:10px;color:var(--text-light);margin-top:4px;">100 gentle quotes loaded</div>
+  </div>
+  <div class="fun-card">
+    <div class="fc-icon">🎲</div>
+    <div class="fc-title">Do Something Crazy</div>
+    <div class="fc-msg" id="crazyMsg">Your tiny crazy idea is waiting ✨</div>
+    <button class="fun-btn" onclick="getCrazy()">Give me an idea 🎲</button>
+    <button class="copy-btn" onclick="copyText('crazyMsg')">Copy</button>
+    <div style="font-size:10px;color:var(--text-light);margin-top:4px;">100 safe crazy ideas loaded</div>
+  </div>
+</div>
+
+<!-- MIDDAY -->
+<div class="midday-card" id="middaySection">
+  <div class="mc-title">⏰ Mid-Day Check-In</div>
+  <div class="mc-quote" id="middayQuote">Loading today's quote...</div>
+</div>
+
+<!-- WINS -->
+<div class="wins-section card-full" id="winsSection">
+  <div class="section-title">🏆 Quick Win Generator</div>
+  <div class="wins-count" id="winsCount">0 wins</div>
+  <div class="wins-categories">
+    <button class="cat-btn active" onclick="setCat(this,'all')">✨ All</button>
+    <button class="cat-btn" onclick="setCat(this,'mfva')">📘 MFVA</button>
+    <button class="cat-btn" onclick="setCat(this,'work')">💼 Work</button>
+    <button class="cat-btn" onclick="setCat(this,'spirit')">🌙 Spirit</button>
+    <button class="cat-btn" onclick="setCat(this,'social')">🤝 Social</button>
+    <button class="cat-btn" onclick="setCat(this,'health')">💧 Health</button>
+    <button class="cat-btn" onclick="setCat(this,'self')">🌿 Self</button>
+  </div>
+  <div class="win-suggestion" id="winSuggestion">🎯 Tap "Generate" to get your first quick win suggestion!</div>
+  <div class="wins-btns">
+    <button class="win-action-btn win-generate" onclick="generateWin()">🎲 Generate</button>
+    <button class="win-action-btn win-log" onclick="logWin()">✅ Log this Win</button>
+    <button class="win-add" onclick="addCustomWin()">+ Add</button>
+  </div>
+  <div class="wins-list" id="winsList"></div>
+</div>
+
+<!-- REFLECTION -->
+<div class="reflection-section card-full" id="reflectSection">
+  <div class="section-title">📝 Day Reflection</div>
+  <div class="reflect-stats">
+    <div class="rs-box"><div class="rs-num" id="reflMFVA">0</div><div class="rs-label">MFVA hrs</div></div>
+    <div class="rs-box"><div class="rs-num" id="reflWork">0</div><div class="rs-label">Work ✓</div></div>
+    <div class="rs-box"><div class="rs-num" id="reflPrayers">0</div><div class="rs-label">Prayers</div></div>
+    <div class="rs-box"><div class="rs-num" id="reflTasks">0</div><div class="rs-label">Tasks Done</div></div>
+  </div>
+  <div class="mood-selector">
+    <button class="mood-btn" onclick="setMood(this,'😔')">😔</button>
+    <button class="mood-btn" onclick="setMood(this,'😐')">😐</button>
+    <button class="mood-btn" onclick="setMood(this,'🙂')">🙂</button>
+    <button class="mood-btn" onclick="setMood(this,'😊')">😊</button>
+    <button class="mood-btn" onclick="setMood(this,'🌟')">🌟</button>
+  </div>
+  <textarea class="reflect-textarea" id="reflectNote" placeholder="How did today go? What are you grateful for? What was hard? What will you do differently tomorrow?"></textarea>
+  <button class="summary-btn" onclick="openSummary()">📋 View Today's Summary</button>
+  <div style="margin-top:10px;text-align:center;">
+    <div style="font-size:11px;color:var(--green-light);">✅ Task completed</div>
+    <div style="font-size:12px;color:var(--text-mid);margin-top:4px;">Keep going, Hadeer.</div>
+  </div>
+</div>
+
+<!-- HELP -->
+<div class="card-full" id="helpSection">
+  <div class="section-title">❔ Help & Guide</div>
+  <div class="help-item"><div class="hi-q">How do I track my day?</div><div class="hi-a">Tap any timeline item to mark it complete. Use the tracker cards below to log water, prayers, and wins.</div></div>
+  <div class="help-item"><div class="hi-q">Does my data save?</div><div class="hi-a">Yes! Everything saves automatically to your device using localStorage with Week 8 keys. Your data is private.</div></div>
+  <div class="help-item"><div class="hi-q">How do I switch days?</div><div class="hi-a">Tap any day in the Week 8 strip at the top, or use the bottom navigation.</div></div>
+  <div class="help-item"><div class="hi-q">What is the commute for?</div><div class="hi-a">Log what you did during your daily commute — this helps you reflect on how you used that 2 hours of transit time each day.</div></div>
+</div>
+
+<div class="section-gap"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bn-item active" onclick="scrollToTop();setBottomNav(this)">
+    <div class="bn-icon">🏠</div>
+    <div class="bn-label">Home</div>
+  </div>
+  <div class="bn-item" onclick="scrollToSection('glanceSection');setBottomNav(this)">
+    <div class="bn-icon">☀️</div>
+    <div class="bn-label">Today</div>
+  </div>
+  <div class="bn-item" onclick="scrollToSection('prayerSection');setBottomNav(this)">
+    <div class="bn-icon">🌙</div>
+    <div class="bn-label">Prayer</div>
+  </div>
+  <div class="bn-item" onclick="scrollToSection('winsSection');setBottomNav(this)">
+    <div class="bn-icon">🏆</div>
+    <div class="bn-label">Wins</div>
+  </div>
+  <div class="bn-item" onclick="scrollToSection('reflectSection');setBottomNav(this)">
+    <div class="bn-icon">📝</div>
+    <div class="bn-label">Reflect</div>
+  </div>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// CONSTANTS & STATE
+// ══════════════════════════════════════════════
+const WEEK = 'week8';
+const DAYS = ['sun','mon','tue','wed','thu','fri','sat'];
+const DAY_DATES = {
+  sun: new Date(2026, 5, 7),
+  mon: new Date(2026, 5, 8),
+  tue: new Date(2026, 5, 9),
+  wed: new Date(2026, 5, 10),
+  thu: new Date(2026, 5, 11),
+  fri: new Date(2026, 5, 12),
+  sat: new Date(2026, 5, 13)
+};
+const HIJRI = {
+  sun:'21 Dhul Hijjah', mon:'22 Dhul Hijjah', tue:'23 Dhul Hijjah',
+  wed:'24 Dhul Hijjah', thu:'25 Dhul Hijjah', fri:'26 Dhul Hijjah', sat:'27 Dhul Hijjah'
+};
+const DAY_NAMES_FULL = {
+  sun:'Sunday', mon:'Monday', tue:'Tuesday', wed:'Wednesday',
+  thu:'Thursday', fri:'Friday', sat:'Saturday'
+};
+
+let currentDay = 'sun';
+let winCategory = 'all';
+let winSuggestion = '';
+let state = {};
+
+// ══════════════════════════════════════════════
+// PERSISTENCE
+// ══════════════════════════════════════════════
+function getKey(k) { return WEEK + '_' + k; }
+function save(k, v) {
+  try { localStorage.setItem(getKey(k), JSON.stringify(v)); } catch(e) {}
+}
+function load(k, def) {
+  try {
+    const v = localStorage.getItem(getKey(k));
+    return v !== null ? JSON.parse(v) : def;
+  } catch(e) { return def; }
+}
+
+// ══════════════════════════════════════════════
+// CLOCK
+// ══════════════════════════════════════════════
+function updateClock() {
+  const now = new Date();
+  const t = now.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', timeZone:'Africa/Cairo' });
+  document.getElementById('heroClock').textContent = t + ' · Cairo, Egypt';
+  document.getElementById('navClock').textContent = t + ' · Cairo, Egypt';
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ══════════════════════════════════════════════
+// TODAY DETECTION
+// ══════════════════════════════════════════════
+function detectToday() {
+  const now = new Date();
+  const cairoNow = new Date(now.toLocaleString('en-US', {timeZone:'Africa/Cairo'}));
+  for (const [day, date] of Object.entries(DAY_DATES)) {
+    if (cairoNow.getFullYear() === date.getFullYear() &&
+        cairoNow.getMonth() === date.getMonth() &&
+        cairoNow.getDate() === date.getDate()) {
+      return day;
+    }
+  }
+  // Default: if before week, show Sunday; if after, show Saturday
+  if (cairoNow < DAY_DATES.sun) return 'sun';
+  return 'sat';
+}
+
+// ══════════════════════════════════════════════
+// DAY SWITCHING
+// ══════════════════════════════════════════════
+function switchDay(day) {
+  currentDay = day;
+  save('currentDay', day);
+  // Hide all day sections
+  document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
+  // Show selected
+  const sec = document.getElementById('day-' + day);
+  if (sec) sec.classList.add('active');
+  // Update strip
+  document.querySelectorAll('.day-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.day === day);
+  });
+  // Update hero
+  updateHeroForDay(day);
+  // Restore day data
+  restoreDayState(day);
+}
+
+function updateHeroForDay(day) {
+  const date = DAY_DATES[day];
+  const dayName = DAY_NAMES_FULL[day];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('heroDate').innerHTML =
+    '<strong>' + date.getDate() + ' ' + months[date.getMonth()] + ' 2026</strong> · ' + dayName;
+  document.getElementById('heroHijri').innerHTML =
+    '<strong>' + HIJRI[day] + '</strong> · 1447 AH';
+  document.getElementById('heroMsg').textContent = getHeroMsg(day);
+}
+
+function getHeroMsg(day) {
+  const msgs = {
+    sun: '🌿 Week 8 begins. Sunday is the first work day — start steady and focused.',
+    mon: '💪 Monday momentum. Work fully, study deeply, pray consistently. You hold all three.',
+    tue: '🤝 Tuesday discipline. Morning MFVA first, then work with full presence.',
+    wed: '🔥 Mid-week. Wednesday is where Week 8 gets won.',
+    thu: '🏁 Last work day. One more push, then the weekend reset begins.',
+    fri: '🕌 Jumu\'ah Friday. No work, no commute — prayer, rest, and deep MFVA time.',
+    sat: '☀️ Saturday reset. Review Week 8, breathe, and prepare gently for Week 9.'
+  };
+  return msgs[day] || '🌿 Keep going, Hadeer.';
+}
+
+// ══════════════════════════════════════════════
+// TIMELINE ITEMS
+// ══════════════════════════════════════════════
+function toggleItem(el) {
+  el.classList.toggle('completed');
+  if (el.classList.contains('completed')) {
+    el.querySelector('.tl-check').textContent = '✓';
+    el.querySelector('.tl-check').style.background = 'var(--green-light)';
+    el.querySelector('.tl-check').style.borderColor = 'var(--green-light)';
+    el.querySelector('.tl-check').style.color = 'white';
+  } else {
+    el.querySelector('.tl-check').style.background = 'var(--green-pale)';
+    el.querySelector('.tl-check').style.borderColor = 'var(--green-pale)';
+    el.querySelector('.tl-check').style.color = 'transparent';
+  }
+  saveTimelineState();
+  updateStats();
+}
+
+function saveTimelineState() {
+  const states = {};
+  document.querySelectorAll('.timeline-item').forEach((item, i) => {
+    states[i] = item.classList.contains('completed');
+  });
+  save('timeline_' + currentDay, states);
+  updateStats();
+}
+
+function restoreTimelineState(day) {
+  const saved = load('timeline_' + day, {});
+  const items = document.querySelectorAll('#day-' + day + ' .timeline-item');
+  items.forEach((item, i) => {
+    if (saved[i]) {
+      item.classList.add('completed');
+      const chk = item.querySelector('.tl-check');
+      if (chk) {
+        chk.textContent = '✓';
+        chk.style.background = 'var(--green-light)';
+        chk.style.borderColor = 'var(--green-light)';
+        chk.style.color = 'white';
+      }
+    }
+  });
+}
+
+function getStudyHoursFromItem(item) {
+  const text = item.textContent.toLowerCase();
+  if (text.includes('3 hours') || text.includes('3 hrs') || text.includes('3+')) return 3;
+  if (text.includes('2.5') || text.includes('2½')) return 2.5;
+  if (text.includes('2 hours') || text.includes('2 hrs') || text.includes('2-hr')) return 2;
+  if (text.includes('1.5') || text.includes('90 min')) return 1.5;
+  if (text.includes('1 hour') || text.includes('1 hr')) return 1;
+  if (text.includes('45 min')) return 0.75;
+  if (text.includes('30 min')) return 0.5;
+  return 0.75;
+}
+
+function updateStats() {
+  const total = document.querySelectorAll('#day-' + currentDay + ' .timeline-item.completed').length;
+  document.getElementById('statTasks').textContent = total;
+  document.getElementById('reflTasks').textContent = total;
+
+  const studyItems = document.querySelectorAll('#day-' + currentDay + ' .timeline-item.study.completed');
+  const studyHours = [...studyItems].reduce((sum, item) => sum + getStudyHoursFromItem(item), 0);
+  const hrsText = studyHours.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+  document.getElementById('statStudy').textContent = hrsText + 'h';
+  document.getElementById('reflMFVA').textContent = hrsText;
+
+  const workDone = [...document.querySelectorAll('#day-' + currentDay + ' .timeline-item.completed .tl-title')]
+    .some(el => el.textContent.toLowerCase().includes('work'));
+  document.getElementById('reflWork').textContent = workDone ? '✓' : '0';
+}
+
+// ══════════════════════════════════════════════
+// WATER
+// ══════════════════════════════════════════════
+function toggleDrop(i) {
+  const drops = load('water_' + currentDay, [false,false,false,false,false,false,false,false]);
+  drops[i] = !drops[i];
+  save('water_' + currentDay, drops);
+  renderDrops(drops);
+  showToast(drops[i] ? '💧 Glass logged!' : '💧 Removed');
+}
+
+function renderDrops(drops) {
+  const dropEls = document.querySelectorAll('.drop');
+  let count = 0;
+  drops.forEach((filled, i) => {
+    if (dropEls[i]) dropEls[i].classList.toggle('filled', filled);
+    if (filled) count++;
+  });
+  document.getElementById('waterLabel').textContent = count + ' / 8 glasses';
+  document.getElementById('waterProg').style.width = (count / 8 * 100) + '%';
+}
+
+// ══════════════════════════════════════════════
+// PRAYERS
+// ══════════════════════════════════════════════
+function togglePrayer(el) {
+  el.classList.toggle('done');
+  const count = document.querySelectorAll('.prayer-check.done').length;
+  document.getElementById('reflPrayers').textContent = count;
+  savePrayerState();
+}
+
+function savePrayerState() {
+  const states = [];
+  document.querySelectorAll('.prayer-check').forEach(el => states.push(el.classList.contains('done')));
+  save('prayers_' + currentDay, states);
+}
+
+function restorePrayerState(day) {
+  const saved = load('prayers_' + day, []);
+  document.querySelectorAll('.prayer-check').forEach((el, i) => {
+    if (saved[i]) el.classList.add('done');
+    else el.classList.remove('done');
+  });
+  const count = document.querySelectorAll('.prayer-check.done').length;
+  document.getElementById('reflPrayers').textContent = count;
+}
+
+// ══════════════════════════════════════════════
+// SPIRITUAL COUNTERS
+// ══════════════════════════════════════════════
+function adjustSi(type, delta) {
+  const key = type + '_' + currentDay;
+  let val = load(key, 0);
+  val = Math.max(0, val + delta);
+  save(key, val);
+  document.getElementById(type + 'Count').textContent = val;
+}
+
+function toggleSi(type) {
+  const key = type + '_' + currentDay;
+  const val = !load(key, false);
+  save(key, val);
+  const btn = document.getElementById(type + 'Toggle');
+  btn.textContent = val ? '💚' : '🤍';
+  btn.classList.toggle('done', val);
+}
+
+// ══════════════════════════════════════════════
+// WORK CHECK
+// ══════════════════════════════════════════════
+function setWork(v) {
+  save('work_' + currentDay, v);
+  document.getElementById('wcbYes').className = 'wcb' + (v === 'yes' ? ' selected-yes' : '');
+  document.getElementById('wcbNo').className = 'wcb' + (v === 'no' ? ' selected-no' : '');
+  showToast(v === 'yes' ? '✅ Great! MFVA evening secured.' : '⚠️ Noted. Protect tomorrow\'s 5 PM.');
+}
+
+// ══════════════════════════════════════════════
+// COMMUTE
+// ══════════════════════════════════════════════
+function toggleCommute(el) {
+  el.classList.toggle('selected');
+  const selected = [...document.querySelectorAll('.commute-opt.selected')].map(e => e.textContent);
+  save('commute_' + currentDay, selected);
+}
+
+// ══════════════════════════════════════════════
+// LUCK & CRAZY
+// ══════════════════════════════════════════════
+const LUCK_QUOTES = [
+  "Allah is with the patient ones. — Quran 2:153",
+  "After hardship comes ease. — Quran 94:5",
+  "Every expert was once a beginner. Keep going.",
+  "Your consistency is your superpower today.",
+  "Small steps compound. You are building something real.",
+  "The Prophet ﷺ said: 'Tie your camel, then put your trust in Allah.'",
+  "You showed up. That is already a win.",
+  "Progress over perfection, always.",
+  "Today's effort is tomorrow's strength.",
+  "Allah does not burden a soul beyond what it can bear. — Quran 2:286",
+  "You are more capable than you realize.",
+  "One more block of MFVA and you are ahead.",
+  "Your discipline today is freedom tomorrow.",
+  "A gentle soul can accomplish great things.",
+  "Ibn Qayyim said: 'Knowledge is a tree, action is its fruit.'",
+  "The work you do in silence speaks loudly.",
+  "Ease follows every difficulty. You are almost there.",
+  "Strong roots make for steady trees. Keep grounding yourself.",
+  "Your intention matters as much as your action.",
+  "This week's Hadeer is building next year's Hadeer.",
+  "Rest is not laziness. Rest is preparation.",
+  "Every prayer is a reset button.",
+  "Consistency beats intensity — every single time.",
+  "Your morning Zekr is the best investment of the day.",
+  "Allah sees your effort even when no one else does.",
+  "The student who rests well studies better.",
+  "You have already overcome harder things than this.",
+  "Your commute Zekr is worth more than you know.",
+  "Success is built one disciplined morning at a time.",
+  "Keep the intention pure and the effort consistent.",
+  "Today is a gift — use it with intention.",
+  "One day you will look back and be proud of now.",
+  "The dua you make tonight might change everything.",
+  "Trust the process, even when you can't see the progress.",
+  "Your MBA journey is nearly complete. Stay the course.",
+  "A kind act today ripples further than you think.",
+  "The person you are becoming is worth the discipline.",
+  "Water your soul like you water your goals.",
+  "Gratitude turns what you have into enough.",
+  "The angels witness your Fajr. Start strong.",
+  "You are not behind. You are exactly where you need to be.",
+  "Difficulties teach us lessons that ease cannot.",
+  "A focused 45 minutes beats a distracted 4 hours.",
+  "Your body is an amanah — treat it with care.",
+  "Every kind word you speak is a sadaqa.",
+  "The Quran you read today plants seeds for tomorrow.",
+  "You chose discipline again. That is everything.",
+  "Make your work an act of worship.",
+  "Your calm is your strength today.",
+  "The one who strives in Allah's path is never alone."
+];
+
+const CRAZY_IDEAS = [
+  "Text someone you haven't spoken to in 3 months just to say you thought of them.",
+  "Write 3 things you're genuinely proud of from this week on a sticky note.",
+  "Do 10 jumping jacks right now. Nobody's watching.",
+  "Order your favourite meal tonight — no guilt.",
+  "Take a 5-minute walk outside before your next task.",
+  "Draw a tiny doodle of your day in the margin of your notebook.",
+  "Listen to a song you loved in high school while getting ready tomorrow.",
+  "Tell a family member something specific you appreciate about them today.",
+  "Make your tea or coffee extra nice — new cup, real care.",
+  "Set your phone wallpaper to something that makes you smile.",
+  "Write next week's biggest goal on your hand in pen.",
+  "Take a photo of something beautiful you see today.",
+  "Add a motivational alarm label for 5:50 AM — 'MFVA BEAST MODE 📘'.",
+  "Rearrange your study corner to feel fresh and new.",
+  "Stand outside for 5 minutes and just breathe.",
+  "Read one page of a book that has nothing to do with your MBA.",
+  "Send a voice note to a friend instead of a text.",
+  "Try a new route home from work this week.",
+  "Buy one small thing that makes your desk feel more like yours.",
+  "Write down the name of the person you want to be in 3 years — then act like her.",
+  "Make your bed perfectly even if nobody sees it.",
+  "Close your eyes, take 3 deep breaths, and make a duaa right now.",
+  "Do a 2-minute brain dump on paper — no filter, just write.",
+  "Put on something nice even if you're just studying at home.",
+  "Give yourself a real compliment out loud.",
+  "Try finishing a task 10 minutes before the deadline on purpose.",
+  "Set a 'no phone' window of 30 minutes and enjoy the silence.",
+  "Plan a tiny reward for finishing this week's MFVA work.",
+  "Look up something you've always been curious about — just for fun.",
+  "Go to bed 20 minutes earlier tonight. Gift yourself the sleep."
+];
+
+function getLuck() {
+  const q = LUCK_QUOTES[Math.floor(Math.random() * LUCK_QUOTES.length)];
+  document.getElementById('luckMsg').textContent = q;
+}
+
+function getCrazy() {
+  const q = CRAZY_IDEAS[Math.floor(Math.random() * CRAZY_IDEAS.length)];
+  document.getElementById('crazyMsg').textContent = q;
+}
+
+function copyText(id) {
+  const text = document.getElementById(id).textContent;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text)
+      .then(() => showToast('Copied! 📋'))
+      .catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy') ? showToast('Copied! 📋') : showToast('Copy failed — select the text manually.');
+  } catch(e) {
+    showToast('Copy failed — select the text manually.');
+  }
+  document.body.removeChild(ta);
+}
+
+// ══════════════════════════════════════════════
+// MIDDAY QUOTES
+// ══════════════════════════════════════════════
+const MIDDAY_QUOTES = [
+  "You are halfway through. The second half is where champions are made.",
+  "Dhuhr prayer: the midday reset. Pray, then return sharper.",
+  "How many glasses of water have you had? Drink one right now.",
+  "What is one thing you can finish before 5 PM today?",
+  "You left the house at 5 AM. By noon, you've already won.",
+  "Your MFVA evening block starts at 7:45 PM. Plan it now.",
+  "Check in: are you present at work, or just physically there?",
+  "Week 8 is happening. You are inside it, doing the work.",
+  "The afternoon will go faster than you think. Protect your focus.",
+  "Did you pray Dhuhr? If not — stop, pray, then carry on.",
+  "Small consistent actions outlast big inconsistent bursts.",
+  "What would tonight's Hadeer thank today's Hadeer for doing right now?",
+  "Breathe. You are exactly where you need to be.",
+  "The road is long but you've been walking it every day.",
+  "One more hour of good work before you head home."
+];
+
+function setMiddayQuote() {
+  const q = MIDDAY_QUOTES[Math.floor(Math.random() * MIDDAY_QUOTES.length)];
+  document.getElementById('middayQuote').textContent = q;
+}
+
+// ══════════════════════════════════════════════
+// WINS
+// ══════════════════════════════════════════════
+const WIN_SUGGESTIONS = {
+  all: [
+    "✅ Read 2 pages of MFVA material",
+    "💧 Drank 8 glasses of water today",
+    "🙏 Prayed all 5 prayers on time",
+    "📘 Finished one MFVA lecture",
+    "💼 Left work exactly at 5 PM",
+    "🌿 Did morning Zekr without skipping",
+    "😴 Was in bed by 11 PM",
+    "🤝 Connected meaningfully with someone",
+    "📝 Wrote in the reflection section",
+    "🎯 Completed the 45-min morning MFVA block"
+  ],
+  mfva: [
+    "📘 Watched one full MFVA lecture",
+    "📝 Took structured notes for 30+ min",
+    "🎯 Made progress on an assignment",
+    "🔁 Reviewed yesterday's MFVA notes",
+    "📚 Read assigned case material",
+    "⏱️ Completed the 45-min morning block",
+    "🌙 Protected the full 2-hr evening session"
+  ],
+  work: [
+    "💼 Left at 5 PM — MFVA evening secured",
+    "✅ Cleared inbox before end of day",
+    "🎯 Finished the top priority task",
+    "🤝 Had a productive work interaction",
+    "💡 Solved a problem at work today"
+  ],
+  spirit: [
+    "🙏 Prayed all 5 prayers on time",
+    "📖 Read Quran for 10+ minutes",
+    "📿 Completed morning Zekr fully",
+    "🤲 Made sincere duaa today",
+    "💚 Gave sadaqa today",
+    "🌙 Did Isha Zekr before sleep"
+  ],
+  social: [
+    "🤝 Checked in on a family member",
+    "😄 Laughed genuinely with someone",
+    "💬 Sent a thoughtful message to a friend",
+    "👨‍👩‍👧 Had a real conversation with family",
+    "☕ Had a meaningful social moment"
+  ],
+  health: [
+    "💧 Drank 8 glasses of water",
+    "🚶 Took a short walk today",
+    "😴 Slept before midnight",
+    "🍎 Ate a nutritious meal",
+    "🧘 Took 5 deep breaths intentionally"
+  ],
+  self: [
+    "🌿 Did something kind for myself",
+    "📓 Wrote in my reflection journal",
+    "🎯 Set tomorrow's top priority",
+    "💡 Learned something new today",
+    "🌟 Gave myself a genuine compliment"
+  ]
+};
+
+function setCat(btn, cat) {
+  winCategory = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function generateWin() {
+  const list = WIN_SUGGESTIONS[winCategory] || WIN_SUGGESTIONS.all;
+  winSuggestion = list[Math.floor(Math.random() * list.length)];
+  document.getElementById('winSuggestion').textContent = winSuggestion;
+}
+
+function logWin() {
+  if (!winSuggestion || winSuggestion.includes('Tap')) {
+    showToast('Tap Generate first!');
+    return;
+  }
+  addWinToList(winSuggestion);
+  winSuggestion = '';
+  document.getElementById('winSuggestion').textContent = '🎯 Tap "Generate" to get your next quick win!';
+}
+
+function addCustomWin() {
+  const text = prompt('What did you accomplish? 🌟');
+  if (text && text.trim()) addWinToList('🌟 ' + text.trim());
+}
+
+function addWinToList(text) {
+  const wins = load('wins_' + currentDay, []);
+  wins.push({ text, time: new Date().toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' }) });
+  save('wins_' + currentDay, wins);
+  renderWins(wins);
+  showToast('Win logged! 🏆');
+}
+
+function renderWins(wins) {
+  const list = document.getElementById('winsList');
+  list.innerHTML = '';
+  wins.forEach((w, i) => {
+    const div = document.createElement('div');
+    div.className = 'win-item';
+    div.innerHTML = '<span style="font-size:18px">🏆</span><span style="flex:1">' + w.text + '</span><span style="font-size:10px;color:var(--text-light)">' + w.time + '</span>';
+    list.appendChild(div);
+  });
+  document.getElementById('winsCount').textContent = wins.length + ' win' + (wins.length !== 1 ? 's' : '');
+  updateStats();
+}
+
+// ══════════════════════════════════════════════
+// MOOD & REFLECTION
+// ══════════════════════════════════════════════
+function setMood(btn, mood) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  save('mood_' + currentDay, mood);
+}
+
+document.getElementById('reflectNote').addEventListener('input', function() {
+  save('note_' + currentDay, this.value);
+});
+
+// ══════════════════════════════════════════════
+// SUMMARY MODAL
+// ══════════════════════════════════════════════
+function openSummary() {
+  const tasksEl = document.getElementById('statTasks').textContent;
+  const studyEl = document.getElementById('statStudy').textContent;
+  const mood = load('mood_' + currentDay, '—');
+  const note = load('note_' + currentDay, '');
+  const wins = load('wins_' + currentDay, []);
+  const prayers = document.querySelectorAll('.prayer-check.done').length;
+  const water = load('water_' + currentDay, []).filter(Boolean).length;
+
+  document.getElementById('summaryContent').innerHTML = `
+    <div class="summary-row"><span class="sr-label">Day</span><span class="sr-val">${DAY_NAMES_FULL[currentDay]} ${DAY_DATES[currentDay].getDate()} Jun</span></div>
+    <div class="summary-row"><span class="sr-label">Timeline Tasks</span><span class="sr-val">${tasksEl}</span></div>
+    <div class="summary-row"><span class="sr-label">Study Hours</span><span class="sr-val">${studyEl}</span></div>
+    <div class="summary-row"><span class="sr-label">Prayers</span><span class="sr-val">${prayers} / 5</span></div>
+    <div class="summary-row"><span class="sr-label">Water</span><span class="sr-val">${water} / 8 glasses</span></div>
+    <div class="summary-row"><span class="sr-label">Wins</span><span class="sr-val">${wins.length}</span></div>
+    <div class="summary-row"><span class="sr-label">Mood</span><span class="sr-val">${mood}</span></div>
+    ${note ? '<div style="margin-top:12px;font-size:12px;color:var(--text-mid);background:var(--green-pale);padding:10px;border-radius:var(--radius-sm);line-height:1.5;">' + note + '</div>' : ''}
+  `;
+  openModal('summaryModal');
+}
+
+
+function buildDaySummary(day) {
+  const oldDay = currentDay;
+  const tasks = load('timeline_' + day, {});
+  const taskCount = Object.values(tasks).filter(Boolean).length;
+  const water = load('water_' + day, []).filter(Boolean).length;
+  const prayers = load('prayers_' + day, []).filter(Boolean).length;
+  const wins = load('wins_' + day, []);
+  const mood = load('mood_' + day, '—');
+  const note = load('note_' + day, '');
+  const studyItems = document.querySelectorAll('#day-' + day + ' .timeline-item.study');
+  let studyHours = 0;
+  studyItems.forEach((item, i) => {
+    if (tasks[i]) studyHours += getStudyHoursFromItem(item);
+  });
+  const studyText = studyHours.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+  return [
+    `${DAY_NAMES_FULL[day]} ${DAY_DATES[day].getDate()} Jun 2026`,
+    `Tasks: ${taskCount}`,
+    `Study hours: ${studyText}h`,
+    `Prayers: ${prayers}/5`,
+    `Water: ${water}/8`,
+    `Wins: ${wins.length}${wins.length ? ' — ' + wins.join(' | ') : ''}`,
+    `Mood: ${mood}`,
+    note ? `Reflection: ${note}` : 'Reflection: —'
+  ].join('\n');
+}
+
+function downloadText(filename, text) {
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function exportDaySummary() {
+  downloadText(`week8-${currentDay}-summary.txt`, buildDaySummary(currentDay));
+  showToast('Summary exported 📄');
+}
+
+function exportWeekSummary() {
+  const content = ['Week 8 Summary — Hadeer', 'Sun 7 Jun 2026 → Sat 13 Jun 2026', ''].concat(
+    DAYS.map(day => buildDaySummary(day))
+  ).join('\n\n---\n\n');
+  downloadText('week8-full-summary.txt', content);
+  showToast('Full week exported 📄');
+}
+
+// ══════════════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+// Close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+// ══════════════════════════════════════════════
+// NOTIFICATIONS
+// ══════════════════════════════════════════════
+function requestNotifications() {
+  if (!('Notification' in window)) {
+    showToast('Notifications not supported on this device');
+    return;
+  }
+  Notification.requestPermission().then(permission => {
+    if (permission !== 'granted') {
+      showToast('🔕 Notification permission not allowed');
+      return;
+    }
+    registerServiceWorker();
+    scheduleTodayReminders();
+    showToast('🔔 Today’s reminders scheduled while the app is open');
+  });
+}
+
+function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+}
+
+const REMINDERS = [
+  { hour: 5, minute: 50, title: '📚 MFVA study block', body: '45 minutes before work. Small but mighty.' },
+  { hour: 17, minute: 0, title: '🚪 Leave work at 5 PM', body: 'Your evening study time depends on this.' },
+  { hour: 19, minute: 45, title: '🌙 Evening MFVA session', body: 'Protect your main study block.' }
+];
+let reminderTimers = [];
+
+function scheduleTodayReminders() {
+  reminderTimers.forEach(clearTimeout);
+  reminderTimers = [];
+  const now = new Date();
+  REMINDERS.forEach(r => {
+    const target = new Date();
+    target.setHours(r.hour, r.minute, 0, 0);
+    const delay = target.getTime() - now.getTime();
+    if (delay > 0) {
+      reminderTimers.push(setTimeout(() => showLocalNotification(r.title, r.body), delay));
+    }
+  });
+}
+
+function showLocalNotification(title, body) {
+  if (Notification.permission !== 'granted') return;
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready
+      .then(reg => reg.showNotification(title, { body, icon: './icon.svg', badge: './icon.svg' }))
+      .catch(() => new Notification(title, { body }));
+  } else {
+    new Notification(title, { body });
+  }
+}
+
+// ══════════════════════════════════════════════
+// NAVIGATION HELPERS
+// ══════════════════════════════════════════════
+function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function setBottomNav(el) {
+  document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ══════════════════════════════════════════════
+// RESTORE DAY STATE
+// ══════════════════════════════════════════════
+function restoreDayState(day) {
+  // Timeline
+  document.querySelectorAll('.timeline-item').forEach((item, i) => {
+    item.classList.remove('completed');
+    const chk = item.querySelector('.tl-check');
+    if (chk) {
+      chk.style.background = 'var(--green-pale)';
+      chk.style.borderColor = 'var(--green-pale)';
+      chk.style.color = 'transparent';
+    }
+  });
+  restoreTimelineState(day);
+
+  // Water
+  const drops = load('water_' + day, [false,false,false,false,false,false,false,false]);
+  renderDrops(drops);
+
+  // Prayers
+  restorePrayerState(day);
+
+  // Spiritual
+  ['quran','zekr'].forEach(type => {
+    const el = document.getElementById(type + 'Count');
+    if (el) el.textContent = load(type + '_' + day, 0);
+  });
+  ['sadaqa','deed'].forEach(type => {
+    const val = load(type + '_' + day, false);
+    const btn = document.getElementById(type + 'Toggle');
+    if (btn) { btn.textContent = val ? '💚' : '🤍'; btn.classList.toggle('done', val); }
+  });
+
+  // Work
+  const work = load('work_' + day, null);
+  document.getElementById('wcbYes').className = 'wcb' + (work === 'yes' ? ' selected-yes' : '');
+  document.getElementById('wcbNo').className = 'wcb' + (work === 'no' ? ' selected-no' : '');
+
+  // Commute
+  const commuteSelected = load('commute_' + day, []);
+  document.querySelectorAll('.commute-opt').forEach(el => {
+    el.classList.toggle('selected', commuteSelected.includes(el.textContent));
+  });
+
+  // Wins
+  renderWins(load('wins_' + day, []));
+
+  // Mood
+  const mood = load('mood_' + day, null);
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent === mood);
+  });
+
+  // Reflection note
+  document.getElementById('reflectNote').value = load('note_' + day, '');
+
+  // Stats
+  updateStats();
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+function init() {
+  // Mark today in strip
+  const today = detectToday();
+  document.querySelectorAll('.day-pill').forEach(p => {
+    if (p.dataset.day === today) p.classList.add('today');
+  });
+
+  // Restore last viewed day or jump to today
+  const savedDay = load('currentDay', today);
+  const startDay = DAYS.includes(savedDay) ? savedDay : today;
+
+  setMiddayQuote();
+  registerServiceWorker();
+  switchDay(startDay);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>

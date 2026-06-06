@@ -1,0 +1,6 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+  <rect width='512' height='512' rx='112' fill='#0f4c3a'/>
+  <circle cx='256' cy='256' r='168' fill='#1a6b52'/>
+  <text x='256' y='238' text-anchor='middle' font-size='96' font-family='Arial, sans-serif' font-weight='700' fill='#f0d080'>W8</text>
+  <text x='256' y='326' text-anchor='middle' font-size='86' font-family='Arial, sans-serif' fill='#ffffff'>🎯</text>
+</svg>
